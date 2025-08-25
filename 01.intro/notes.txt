@@ -1,0 +1,69 @@
+What do servers have
+1. CPU for compute 
+2. RAM (Memory) for temporary storage 
+3. Data (Storage) used to permanently store data 
+4. Database for structured data 
+5. Network : Routers, switch, DNS server 
+
+
+Cloud Computing 
+- on-demand deliver of compute power, database storage, applications, and IT resources.
+- it is pay as you go 
+- provision exactly the right type and size of compute resources 
+- resources are provisioned instantly 
+- simple way to access servers, storage, database and apps 
+
+Types of clouds 
+- private cloud  eg rockspace 
+- public cloud eg aws, azure, gcp 
+- hybrid cloud mix of private and public 
+
+
+Xtics of cloud computing 
+- fully on demand and self service 
+- broad network with resources 
+- multi-tenancy and resource pooling i.e customer can share infra and application.
+- rapid elasticity and scalability 
+- usage is measured as you pay for exactly what you have used. 
+
+Type of cloud computing 
+
+1.Infrastructure as a Service (IaaS)
+- provides building block for cloud IT 
+- provides networking, computers, data storage space 
+- highest level of flexibility 
+- easy to parrallel with traditional on-prem IT 
+- eg ec2 
+
+2. Platform as a Service (PaaS)
+- removes the need for organization to manage underlying infrastructure 
+- you only focus on deployment of your application 
+- eg Elastic Beanstalk, Heroku, App Engine 
+
+3. Software as a Service (SaaS)
+- everything is managed by provider 
+- eg jira, gmail etc 
+
+
+AWS Concepts 
+1. Regions -> are available all over the world with the the african one being in South Africa. 
+- regions have names like us-east-1, eu-west-3
+- a region is a cluster of data centers 
+- services are scoped to a region 
+How to choose a region ?
+- factors 
+- compliance eg data governance 
+- latency. When your users are in us, pick us regions 
+- avaialability of services confirm if a feature or service is in your region 
+- pricing varies from region to region therefore pick the one which suits you.
+
+2. Zones -> these are what are going into the regions 
+-  they are usually 3 with min of 2 and max of 6 
+- these are discret data center which have redundant power, networking, and connectivity 
+- they are isolated from each other therefore protects against disaster 
+- connected with high bandwith ultra low latency network 
+
+
+3. Point of presence/Edge Locations 
+- aws has 216 points of presenc in 84 cities across 42 countries. 
+- 
