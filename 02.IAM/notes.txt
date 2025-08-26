@@ -1,0 +1,128 @@
+IAM: Users & Groups 
+
+IAM - Identity and Access Management, Global Service 
+- Creates users and assign them to groups 
+- root user is part of IAM 
+- should not use root user or share the details 
+- users are people within an organization and can be grouped 
+- groups can only contain users not other groups 
+- some users may not belong to a group 
+- a user can belong to multiple groups 
+- groups & users are created to allow them use aws resources 
+- users and groups can be assigned a json document called policies 
+
+sample policies
+{
+    "version":"2012-10-17",
+    "Statement":[
+        {
+            "Effect":"Allow",
+            "Action":"ec2:Describe*",
+            "Resource": "*"
+        },
+        {
+            "Effect":"Allow",
+            "Action":"elasticloadbalancing:Describe*",
+            "Resource":"*"
+        },
+        {
+            "Effect":"Allow",
+            "Action":[
+                "cloudwatch:ListMetrics",
+                "cloudwatch:GetMetricStatistics",
+                "cloudwatch:Describe*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+- these policies define permissions of users 
+- apply least principle privilege.
+
+IAM Policies inheritance
+- imagine you have a group of developers bix, mike, dan 
+- we attach a policy at group level, all the three will get the developers policies
+- we can also have another group Operation for david, edward 
+- we can also have inline policy for  Fred who does not belong to any group 
+- we can also have AuditTeam which David and Dan can belong to 
+- in this case, David and Dan will be in two groups 
+
+IAM Policies Structure 
+- consists of:
+    1. Version:policy language version, always include "1012-10-17".
+    2. Id: an identifier for the policy (optional)
+    3. Statement: one or more individual statements (required)
+- Statement consists of 
+    - Sid: an identifier for the statement (optional)
+    - Effect: whether the statement allows or denies access (Allow,Deny)
+    - Principal: account/user/role to which this policy applied to
+    - Action: list of actions this policy allows or denies 
+    - Resource: list of resources to which the actions will be applied to 
+    - Condition: conditions for when this policy is in effect (optional)
+
+sample 
+
+{
+    "Version":"2012-10-17",
+    "Id":"S3-Account-Permissions",
+    "Statement": [
+        {
+            "Sid":"1",
+            "Effect":"Allow",
+            "Principal":{
+                "AWS":["arn:aws:iam::123456789:root"]
+            }
+        },
+        "Action":[
+            "s3:GetObject",
+            "s3:PutObject"
+        ],
+        "Resource": ["arn:aws:s3::::mybucket/*"]
+    ]
+}
+
+NB
+- you can use aws predefined policies by click on policies in IAM service 
+- you can also create your own policy 
+- navigate to policies -> create policy : you can use visual editor or json 
+- for visual editor just pick a Service eg IAM 
+- choose an Action eg ListUser
+- choose a Resource(s) eg Specific or All Resources 
+- you can also pick request condition 
+
+
+IAM - Password Policy 
+a) Strong passwords = higher security for your account 
+- in aws you can set up a password policy with:
+    - min password lenght
+    - require specific characters types eg uppercase, lowercase, numbers, non-alphanumeric characters 
+    - allow all IAM users to change their own passwords 
+    - require users to change password after sometime 
+    - prevent password reuse 
+- this prevents brute force 
+
+b) Multi Factor Authentication - MFA 
+- it is a must in aws 
+- you want to protect your root accounts and IAM users 
+- MFA combines your password and a security device of your own.
+- password and mfa generate token => success login 
+- MFA options 
+    Passkey or security key 
+    Authenticator app 
+    Hardware TOTP token 
+- mfa devices options 
+    virtual mfa device eg google authenticator, authy 
+    universal 2nd factor (u2f) security key 
+    hardware key fob mfa device 
+
+
+Accessing AWS Console 
+- To access AWS, you have three options:
+    AWS Management Console (protected by password + MFA)
+    AWS Command Line Interface (CLI): protected by access keys 
+    AWS Software Development Kit (SDK) proteced by access keys 
+- access keys are generated through the AWS console 
+- users manage their own access keys 
+- access keys are secrets like passwords 
+- 
