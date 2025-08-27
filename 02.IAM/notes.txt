@@ -125,4 +125,81 @@ Accessing AWS Console
 - access keys are generated through the AWS console 
 - users manage their own access keys 
 - access keys are secrets like passwords 
-- 
+
+
+AWS CLI & SDK
+- A tool that enables you to interact with AWS services using commands in the command-line shell. 
+- every command starts with `aws` 
+- with this command you get access to the public APIs of AWS services 
+- cli is open source and alternative to console 
+- SDK is langaugae specific and enable you to access and manage AWS services programmatically.
+- it is embedded within application 
+
+
+Creating Security Credentials 
+- NB: do not use your root user to create security credentials 
+- User -> username -> Security credentials -> Access keys 
+- You will get the access key and secret access key
+- use aws configure 
+- set AWS access key id 
+- set AWS secret access key 
+- set default region 
+- you can leave default output format empty 
+- use `aws iam list-users` to view all the users in your account 
+- returns something like this 
+{
+    "Users": [
+        {
+            "Path": "/",
+            "UserName": "user",
+            "UserId": "****",
+            "Arn": "arn:aws:iam::****:user/user",
+            "CreateDate": "2025-08-26T01:49:07+00:00",
+            "PasswordLastUsed": "2025-08-27T01:32:39+00:00"
+        }
+    ]
+}
+
+- Management console and cli are similar. 
+
+Cloud Shell 
+- is an alternative to console and cli 
+- cloud shell is located on the top right with `>_` icon 
+- click on it then start issuing aws commands 
+- it is a terminal in the cloud of aws 
+- it returns api call as if the api calls being used 
+- you can specify the region you want to use 
+
+
+IAM Roles for services 
+- some aws servie will need to perform actions on our behalf 
+- to do so, we will assign permissions to AWS services with IAM roles 
+- common roles include:
+     ec2 instance roles 
+     lambda function roles 
+     cloudformation roles 
+- use the `Roles` on IAM menu 
+
+IAM Security Tools 
+- we can create IAM credentials report at account-level 
+- this report will list all your account users and status of their credentials 
+
+
+IAM Access Advisor 
+- this is at the user-level and shows the service permissions granted to a user and when those services were last accessed.
+- important on the principle of the least privilege
+
+Steps 
+- click `Credential report` on the IAM and then download the report 
+
+
+IAM Guidelines & Best Practise 
+- do not use the root account except for AWS account setup 
+- one physical user = one AWS user 
+- assing users to groups and assign permission at group level 
+- create strong password policy 
+- use and enforce the use of Mutli Factor Authentication (MFA)
+- create and use roles for giving permissions to AWS services 
+- generate access keys to access aws cli/sdk 
+- to auditn permissions of your account use IAM Credentials Report 
+- Never share IAM users and access key 
