@@ -1,0 +1,73 @@
+Amazon EC2
+- is the most popular service in aws 
+- EC2 -> Elastic Compute Cloud 
+- it is infrastructure as a service 
+- You can :
+    rent virtual machines on ec2 (EC2)
+    store data on virtual drives (EBS)
+    distribute load across machines (ELB)
+    scale services using an auto-scaling group (ASG)
+-knowing how to use ec2 is fundamental in knowing how cloud works 
+
+
+What can we choose for our instances/virtual servers 
+1. Operating Systems -> Linux, Windows, Mac OS 
+2. Compute power & cores (CPU) you want for your vms 
+3. How much Random Access Memory (RAM)
+4. How much storage space / Hard disk 
+5. Network card type, speed of the card, Public IP address
+6. Firewall rules; security groups 
+7. Bootstrap script (configure at first launch) : EC2 user data 
+
+- it is possible to Bootstrap our instances using an EC2 user data script 
+- bootstrapping means launching commands when a machine starts 
+- that script is only ran once at the instance first start and will never run again. 
+- EC2 user data is used to automate boot tasks such as:
+    install updates 
+    install software 
+    download common files from internet 
+    anything you can think of 
+    NB: the more you add the more the instance boot time increases 
+- The EC2 user data script runs with the root user i.e sudo 
+
+
+EC2 Instance Types 
+- t2.micro
+- t2.xlarge 
+- c5d.4xlarge 
+- r5.16xlarge 
+- m5.8xlarge 
+NB: these are just a few examples
+
+Hands-On 
+- launching an ec2 instance running linux 
+- use aws console 
+- get high level to various params 
+- launch a web server using ec2 user data 
+- start, stop, terminate instances 
+
+Steps:
+- search for ec2 
+- choose region (make it the one near you)
+- click instances 
+- launch instances 
+- choose ami (Amazon Machine Image)
+- an AMI contains the operating system, application server, and applications for your instance.
+
+Instance Types Overview 
+- different instances types are optimized for different use cases 
+- There are seven different types 
+1. General purpose 
+2. Compute Optimized 
+3. Memory Optimized 
+4. Accelerated Computing 
+5. Storage Optimized 
+6. Instance Features 
+7. Measuring Instance Performance 
+
+NB: Each instance types has different family types eg m5.2xlarge
+m -> instance class 
+5 -> generation (aws improve them over time)
+2xlarge -> the size within the instance class 
+
+NB: Compare the instances at ec2instances.info website 
