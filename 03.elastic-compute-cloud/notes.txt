@@ -60,7 +60,7 @@ Instance Types Overview
 1. General purpose 
 2. Compute Optimized 
 3. Memory Optimized 
-4. Accelerated Computing 
+4. Accelerated Computing
 5. Storage Optimized 
 6. Instance Features 
 7. Measuring Instance Performance 
@@ -71,3 +71,112 @@ m -> instance class
 2xlarge -> the size within the instance class 
 
 NB: Compare the instances at ec2instances.info website 
+
+
+Introduction to Security Groups
+- security group are the fundamental of network security in AWS
+- they control how traffic is allowed into or out of EC2 instances
+- security groups only contain allow rules
+- security groups rules can reference by IP or by security group
+
+
+Security Group Deep Dive
+- security group are acting like a `firewall` on EC2 instances
+- They regulate :
+    1. access to ports
+    2. authorized ip ranges ipv4 & ipv6
+    3. control of inbound network (from other to instances)
+    4. control of outbound network (from the instances to other)
+
+ TYPE           PROTOCOL        PORT RANGE      SOURCE                      DESCRIPTION
+ HTTP           TCP             80              0.0.0.0/0                   test http page
+ SSH            TCP             22              122.149.196.85/32
+ Custom Rule    TCP             4567            0.0.0.0/0                   java app
+
+ Security Group Good to know
+ - can be attached to multiple instances
+ - locked down to a region/vpc combination
+ - they live outside the EC2
+ - it is good to maintain one separte security group for SSH access
+ - if your application is not accessible (time out) then it is a security group issue
+ - for connection refused error then it is an application error
+ - all inbound traffic is blocked by default
+ - all outbout traffic is authorized by default
+
+How to Reference Security Group from Other Security Group
+- assume you have security group 1 with inbound, authorize security group 1 & security group 2 to access an EC2
+instances of IP xx.xx.xx.xx.
+- you have other two instances of EC2 say instance A and B
+- if you attach security group 2 to instance A and security group 2 to instance B, you will be able to access the
+instance of IP xx.xx.xx.xx
+
+Classic Ports
+- 22 for ssh (secure shell) and allows you to log into linux instance
+- 21 for ftp (file transfer protocol) uploads file into a file share
+- 22 for sftp (secure file transfer protocol) uploads file using ssh
+- 80 http access unsecured websites
+- 443 https access secured websites
+- 3389 rdp (remote desktop protocol) allows you to log into a windows instance
+
+
+SSH Summary Table
+- ssh is utility tool which can be used for mac, linux, windows >= 10.
+- you can also use putty as ssh to connect to your EC2 instances.
+- there is also ec2 instance connect since you can use web browser to connect to your instances
+-
+
+
+SSH into Linux/Mac OS
+- ssh allows you to control access to a remote machine, all using the command line.
+- To ssh into the vm you need key-pairs for permission
+- Use ssh -i keys.perm ec2-user@18.132.42.128
+- NB: you have to change the permissions mode on your .pem file for aws to accpet using it
+- you can do 400 or 600
+- chmod 600 bix-node02-keys.pem
+- ssh -i bix-node02-keys.pem ec2-user@18.132.42.128
+
+EC2 Instance Roles
+- ssh into your instance as above
+- run `whoami` on the terminal
+- returns something like ec2-user
+- `aws iam list-users`
+- use IAM roles and attach them into your ec2 instance as part of security group
+- now run `aws iam list-users` and it will return the users from IAM
+
+EC2 Instance Purchasing Options
+- there are various optons of EC2 instances you can select from:
+1. on-demand -> short workload, predictable pricing. Pay for what you use
+2. reserved instance -> can be purchased for a minimum of 1 year
+    - will give you upto 75% discount compared to on demand
+    - reservation period is 1 or 3 years
+    - can also have purchasing options, no upfront, or all upfront
+    - reserve specific instance type
+    - recommended for steady-state usage
+    types
+    reserved instances - long workloads
+    convertible reserved instances - long workloads with flexible instances
+     - can change the EC2 instance type
+     - upto 54% discount
+    schedule reserved instance eg every thursday between 3 and 6 pm.
+     - launch within time window
+3. spot instances -> short workloads, cheap, can lose instances (less reliable)
+     - upto 90% discount
+     - you can lose these instance if the price you are willing to pay is less than current spot price
+     - most cost-efficient instances in aws
+     - useful for batch jobs, data analysis, image processing
+     - any distributed workload
+     - not suitable for critical job or database
+4. dedicated hosts -> book an entire physical server, control instance placement
+    - this is an entire server (physical) with ec2 instance capacity fully dedicated to your use
+    - can be useful in address compliance requirements and reduce cost by allowing you to use existing server-bound
+      software licenses.
+    - are allocated for your account for 3 year reservation period
+    - more expensive
+    - useful for software that have complicated licensing model (bring your own license)
+    - or for companies that have strong regulatory or compliance needs
+ 5. dedicated instances
+     - there is dedicated instances running on hardware that is dedicated to you
+     - may share hardware with other instances same account
+     - no control over instance placement
+     - the hardware is dedicated to you.
+     - 
