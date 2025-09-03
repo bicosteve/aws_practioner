@@ -1,0 +1,85 @@
+There are various types of ec2 storage. 
+
+1. EBS Volume 
+- Elastic Block Storage Volume is a network drive you can attach to your instances while they run. 
+- allow persistence of data even after instances have been terminated 
+- They can only be mounted to one instance at a time (Cloud Practioner Level)
+- They are bound to a specific availability zone i.e you cannot have an instance in eu-central-1 attaching EBS volume in eu-central-2. 
+- Anology: Think of it as a 'network USB stick' which you can take from one instance and attach it to another instance. 
+- Free tier gives 30GB of free EBS storage of type General Purpose (SSD) or Magnetic per month
+- It is a network drive (not a physical drive).
+- it uses the network to communicate the instance which means there might be a bit of latency.
+- you can detach them from ec2 instance and attach them to another one very quickly 
+- they are locked to a specific zone i.e if attached to us-east-1b it cannot be attached to instances in us-east-1a. 
+- to move it across, you have to first snapshot it then move 
+- you need to provision the capacity in advance that is size in GBs, and IOPs (input/output operations)
+- you get billed for all the provisioned capacity 
+- you can increase the capacity of the drive over time 
+- EBS volumes can be created but not attached 
+- you have `delete on termination` which controls the behaviour when an EC2 instance terminates 
+- by default, the root EBS volume is deleted when an instanc is terminated. The attribute is enabled by default 
+- any other attached EBS volume is not deleted (attribute disabled)
+
+
+** EBS Snapshot ** 
+- you can make a backup (snapshot) of your EBS volume at a point in time 
+- even if the ebs volume is terminated, you can get the data back 
+- you can copy snapshot across availability zones or region 
+- you can use the ebs snapshot into another zone/region 
+ Steps 
+ * move to action 
+ * create snapshot 
+ NB: snapshot is available within a region 
+ * you can compy snapshop to another region 
+ * click on actions then copy then pick region 
+ * to create a volume, click on actions then volumes 
+ * you can pick availability zone and then name tag 
+ * 
+
+** AMI Overview ** 
+- what powers EBS ?
+- AMI (Amazon Machine Image) 
+- AMI represents customization of an EC2 instance 
+- you can use ami by aws or use your own 
+- you add your own software, configurations, operating system, monitoring etc 
+- has faster boot/configuration time beasue all your software is pre-packaged 
+- AMI are built for a specific region but or can be copied across regions 
+- You can launch EC2 instances from :
+    1. Public AMI : AWS provided eg Amazon Linux 2 
+    2. Your own AMI : you can make & maintain them yourself 
+    3. An AWS Marketplace AMI : an AMI someone else made (and potentially sells). 
+- AMI Proces 
+    * start an ec2 instance 
+    * stop the instance (data integrity)
+    * build an AMI - this will create EBS snapshots 
+    * launch instances from other AMIs 
+    * 
+NB: Customized AMI can be used to quickly boot up and provision vms 
+
+
+** EC2 Image Builder ** 
+- used to automate the creation of virtual machines or container images 
+- it automates creation, maintainance, validation and testing of EC2 AMIs. 
+- Steps 
+  * EC2 Image Builder 
+  * create 
+  * Builder EC2 instance 
+  * Builds components applied and customize software on instance 
+  * New AMI will be created from the instance 
+  * EC2 image builder will create a test ec2 instance and run some tests 
+  * once tested, AMI can be distributed to multiple regions 
+- AMI is distributed and can be used in multiple regions 
+- can be run on schedule (weekly, whenever packages are updated, etc ...)
+- it is a free service you only pay for the underlying resources 
+
+
+2. EC2 Instance Store 
+- EBS volumes are good network drives but have `limited` performance 
+- For high performance hardware disk, use EC2 instance store 
+- Has better I/O performance 
+- Downside of EC2 instance storage is they lose data when the instance is stopped! 
+- good use case is cache, buffer, scratch data , temporary content 
+
+
+3. EFS - Elasting File System 
+- 
