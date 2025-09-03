@@ -179,4 +179,4 @@ EC2 Instance Purchasing Options
      - may share hardware with other instances same account
      - no control over instance placement
      - the hardware is dedicated to you.
-     - 
+     -
