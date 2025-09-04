@@ -82,4 +82,29 @@ NB: Customized AMI can be used to quickly boot up and provision vms
 
 
 3. EFS - Elasting File System 
-- 
+- Managed network file system that can be mounted on hundreds of EC2s 
+- it works with linux ec2 instances in multi-availability zones 
+- it is highly available, scalable, expensive (3 times the price of ) pay per use, and no capacity planning. 
+
+
+4. EFS Infrequent Access (EFS-IA)
+- storage class that is cost-optimized for files not accessed every day.
+- gives upto 92% lower cost compared to EFS standard 
+- if you enable IA, EFS will automatically move your files to EFS-IA based on the last time they were accessed
+- Enable EFS-IA with a Lifecycle Policy
+- Example: move files that are not accessed for 60 days to EFS-IA 
+
+
+5. Amazon FSx for Windows File Server 
+- it is a fully managed, highly reliable, and scalable Windows native shared file system 
+- It is build for windows file server 
+- supports SMB protocol & Windows NTFS 
+- it is integrated with Microsoft Active Directory 
+- can be accessed from AWS or on your on-premise infra 
+
+
+6. Amazon FSx for Lustre 
+- this is a fully managed, high-performance, scalable file storage for High Performance Computing (HPC).
+- name is Lustre is derived from 'Linux' and 'cluster' 
+- used for machine learning, analytics, video processing, financial modelling etc 
+- scalable upto 100s GB/s million IOPs, sub-ms 
