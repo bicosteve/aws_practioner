@@ -1,0 +1,100 @@
+Introduction 
+- amazon s3 is one of the building blocks of aws.
+- it is advertised as infinitely scaling storage 
+- many websites use s3 as a backbone 
+- many aws services uses s3 as an integration as well 
+- 
+
+S3 Use Cases 
+- back and storage 
+- disaster recovery 
+- archive data 
+- hybrid cloud storage 
+- appplication hosting 
+- media hosting 
+- data lakes and big data analytics 
+- software delivery 
+- static websites 
+
+S3 Overview - Buckets 
+- s3 allows people to store `objects` (files) in `buckets` (directories).
+- buckets must have globally unique name (across all regions and accounts)
+- buckets are define at region level 
+- s3 looks like a global service but the buckets are created in a region 
+- naming convention is: 
+    -> no uppercase 
+    -> no underscore 
+    -> 3-36 characters long 
+    -> Not an IP 
+    -> must start with lowercase letter or number 
+
+S3 Overview - Objects 
+- objects (files) have a `Key` 
+- the key is the FULL path : eg s3://my-bucket/my_file.txt here, key is my_file.txt . Can also be in subfolders eg s3://my-bucket/my_folder1/another_folder/my_file.txt 
+- the key is composed of prefix + object name 
+    -> s3://my-bucket/my_folder1/another_folder/my_file.txt 
+- object values are the content of the body 
+- max object size is 5TB 
+- if using over 5GB must use multi-part upload 
+- has metadata (list of text of key/value pairs - system or user metadata)
+- has tags which are useful for security/lifecycle 
+
+
+S3 Security Bucket Policy 
+
+(a) User Based 
+- Uses IAM policies that is, which API calls should be allowed for a specific user from IAM console 
+
+(b) Resource Based 
+-> bucket policies : bucket wide rules from the S3 console - allows cross account 
+-> object access control list (ACL) : finer grain 
+-> bucket access control list (ACL) : less common 
+
+NB: an IAM principal can access an S3 object if:
+    -> the user IAM permission allows it OR the resource policy ALLOWS it 
+    -> there is no explicit DENY on the bucket 
+- you can encrypt objects using encryption keys so that no one but you can decrypt the objects 
+
+** Example One : Public Access - Use Bucket Policy 
+- if an anonymous user from a website tries to access your S3 bucket, create a S3 Bucket Policy which allows public access to the bucket 
+
+** Example Two : User Access to S3 - IAM Permission 
+- Create an IAM Policy which allows user to access the bucket 
+- You do not need S3 Bucket Policy since the IAM policy allows user to access the bucket 
+
+** Example Three : EC2 instance access - Use IAM Roles 
+- create an EC2 instance Role and attach IAM permissions to the ec2 instance role.
+- the ec2 instance will use the role to access the bucket 
+
+** Example Four : Cross-Account Access - Use Bucket Policy 
+
+
+
+S3 Bucket Policies 
+- they are json based policies
+- resource based : buckets and objects 
+- actions : set of api to allow or deny 
+- effect : allow/deny  
+{
+    "Version" : "2012-10-17",
+    "Statement" : [
+        {
+            "Sid":"PublicRead", 
+            "Effect":"Allow", 
+            "Principal":"*",
+            "Action" : [
+                "s3:GetObject"
+            ],
+            "Resource" : [
+                "arn:aws:s3:::examplebucket/*"
+            ]
+        }
+    ]
+
+}
+
+- use s3 bucket for policy to :
+    -> grant public access to the bucket 
+    -> force object to be encrypted at upload 
+    -> grant access to antoher account (cross account)
+    -> 
