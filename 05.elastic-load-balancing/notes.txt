@@ -1,0 +1,59 @@
+** Elastic Load Balancing & Auto Scaling Group ** 
+
+1. Scalability & High Availability 
+- scalability means that an application/system can handle greater loads by adapting. 
+- two kinds of scalability:
+* vertical scalabilityc 
+    -  increase the size of the instance 
+    - eg application runs on t2.micro,you can vertically scale it to run on t2.large
+    - vertical scalability is common for non distributed systems like database
+    - this is done for performance 
+    - there is a limit on how much you can scale the hardware.
+
+* horizontal scalability (elastic)
+    - instead of increase the size, you increase the **number** of instances 
+    - distributed systems are horizontally scaled
+    - common for modern web applications/modern applications 
+    
+* high availability
+- this means you are running your application/systems in atleast two availability zones.
+- goal is to survive a disaster
+- 
+
+Terms 
+scalability -> ability of a system to accomodate a larger load by making the hardware stronger (scale up), or by adding nodes (scale out). 
+elasticity -> system can be scaled based on the load. it is cloud friendly pay-per-use, match demand, optimize costs.
+agility -> this means how fast you can make resources available from weeks to just minutes. 
+
+2. Elastic Load Balancing 
+- Load balancers are servers that forward internet traffic to multiple servers (EC2 instances) downstream 
+- This is managed by aws 
+- we can have one load balancer which is the entry point where users access our systems. 
+- behind the load balancer, we can have more than one instance where the load balancer distribute internet traffic to each of the servers 
+- the more users you have the more the load it distributes to the instances 
+- ELB is a managed load balancer meaning aws will manage it for you 
+- you only need to configure the knobs 
+- you can create your own load balancer in aws but it will be more costly in terms of effort for your in terms of maintainance, integration etc 
+- 
+
+Why Load Balancer 
+- it spreads load across multiple instances downstream 
+- expose a single point of access (DNS) to your application 
+- seamlessly handle failures of downstream instances 
+- do regular health check to your instances 
+- provide SSL termination (HTTPs) for your website 
+- high availability across zones
+
+Types of load balancers 
+    1. Application Load Balancer 
+        - this is layer 7 load balancer 
+        - is for (HTTP/HTTPS) only 
+    2. Network Load Balancer 
+        - ultra-high performance 
+        - allows for tcp
+        - layer 4
+    3. Classic Load Balancer 
+        - provides layer 4 & 7 
+        - slowly being retired 
+    
+
