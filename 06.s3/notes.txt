@@ -97,4 +97,103 @@ S3 Bucket Policies
     -> grant public access to the bucket 
     -> force object to be encrypted at upload 
     -> grant access to antoher account (cross account)
-    -> 
+    -> NB: Leave Block Public Access ON if you know your data should not be public 
+    -> they were created to prevent company data leaks 
+
+
+S3 Websites 
+- s3 can host static websites and have them accessible via www 
+- the website url will be : <bucket-name>.s3-website-<AWS-region>.amazonaws.com 
+- you should be able to access the url once the bucket is public 
+- enable the bucket as a website with html files 
+- check on properties -> static website hosting
+- you will get the bucket website endpoint 
+
+S3 Versioning 
+- you can version your files in s3 
+- it is enabled at the bucket level 
+- same key overwrite with increment the 'version' 1,2,3 
+- it is best practice to version your buckets 
+- versioning protects against intended deletes (ability to restore version)
+- easy roll back to previous version 
+
+NB: 
+-> any file that is not versioned prior to enabling versioning will have version 'null'
+-> suspending versioning does not delete the previous versions 
+
+
+S3 Access Logs 
+- for audit purpose, you may want to log all access to your S3 buckets 
+- any request made to S3 from any account, authorized or denied, will be logged into another S3 bucket 
+- that data can be analyzed using data analysis tools 
+- very helpful to come down to the root case of an issue 
+- click on the bucket -> settings -> server access logging 
+
+
+S3 Replication (CRR & SRR)
+- you can have replication of your bucket across regions 
+- it is done asynchronously 
+- you must enable versioning in source and destination 
+- Cross Region Replication (CRR)
+- Same Region Replication (SRR)
+- buckets can be in different accounts 
+- copying is asynchronous
+- must give proper IAM permission to S3 
+
+-> CRR Use Case : compliance, lower latency access, replication across accounts 
+-> SRR Use Case : log aggregation, live replication between production and test accounts 
+
+
+S3 Storage Classes 
+1. General Purpose S3 which is standard
+2. Standard-Infrequent Access (IA) : not frequently accessed data 
+3. One Zone-Infrequenct Acces : File which you do not access often 
+4. Intelligent Tiering : Optimizes cost based on data frequency access 
+5. Glacier : Designed for long term low cost data storage. Perfect for rarely accessed data.
+6. Glacier Deep Archive : lowest-cost storage class, purpose-built for long-term data retention where access is extremely rare—think once a year or less.
+
+** Terms ** 
+-> Durability : how often you will lose a file. High durability has 11 9's -> 99.999999999% 
+-> same for all storage classe 
+-> Availability : measures how readily available a service is. S3 standard is 99.99% availability meaning in a year, it will only be unavailable for 53 minutes! 
+
+S3 Storage Classes Deep Dive 
+1. S3 Standard - General Purpose 
+- is available 99.99% 
+- used for frequently accessed data 
+- give low latency and high throughput 
+- sustain 2 concurrent facility failures 
+- Use Cases : big data analytics, mobile & gaming applications, content distribution etc 
+
+2. S3 Standard - Infrequent Access 
+- suitable for data less frequently accessed but when you want it you want it fast 
+- 99.9% 
+- lower cost 
+- when files are accessed you incur a fee 
+- sustain 2 concurrent facility failures 
+- Use Case : as a data store for disaster recovery, backups ...
+
+3. S3 Intelligent-Tiering 
+- 99.9% availability 
+- same low latency and high throughput performance of S3 standard 
+- cost-optimized by automatically moving objects between two access tiers based on changing access patterns:
+    -> frequent access : 
+    -> infrequent access :
+- reslient against events that will impact an entire availability zone 
+
+
+4. S3 One Zone - Infrequent Access (IA)
+- same as IA but data is stored in a single zone 
+- less availability of 99.5% 
+- lower cost compared to S3-IA 
+- Use Case : Storing secondary backup copies of on-premise data or storing data you can recreate 
+
+
+5. Amazon Glacier & Glacier Deep Archive 
+- something you will use for archiving backup
+- data will be retained for longer time 
+- glacier is cheap 
+- glacier deep archive even cheaper 
+
+
+
