@@ -251,4 +251,3 @@ Types of storage gateway :
 
 
 
-
