@@ -228,6 +228,27 @@ Edge Computing
 - processing data while it is being created on an edge location 
 - can be a truck on the road, ship, mining station underground 
 - these location can be limited in terms of internet access, no easy acces to computing power 
-- 
+
+
+Hybrid Cloud for Storage 
+- aws is pushing for hybrid cloud 
+- part of your infra is on prem 
+- part of your infra is on cloud 
+- benefits are :
+    long cloud migrations 
+    security requirements 
+    compliance requirements 
+    IT strategy 
+BN: S3 is a proprietary storage technology therefore you need to expose S3 data on prem 
+- use a `Storage Gateway` which bridges on premise data and cloud data on S3 
+- hybrid sotrage service allows on-prem to seamlessly use the AWS cloud 
+- use cases : disaster recovery, backup, & restore, tiered storage 
+
+Types of storage gateway :
+- file gateway 
+- volume gateway 
+- tape getway 
+
+
 
 
