@@ -196,4 +196,38 @@ S3 Storage Classes Deep Dive
 - glacier deep archive even cheaper 
 
 
+6. AWS Snow Family
+- highly secure, portable device to collect and process data at the edge and to migrate data in and out of AWS 
+- These are the Snow Family 
+    1. Migrating Data 
+        - snowcone 
+        - snowball edge 
+        - snow mobile 
+
+    2. Edge Computing 
+        - snowcone 
+        - snowball edge 
+
+
+Data Migration with Snow Family 
+- there can be challenges in transferring data due to limited connectivity, limited bandwidth, shared bandwidth, and high network cost. 
+- all these challenges make the case for the AWS Snow Family 
+- they are offline devices that perform data migrations 
+- if it takes more than one week to transfer data, use snowball devices 
+- for data migration we have snowcone, snowball edge, and snowmobile 
+
+
+How to use Snow Family 
+- request for snowball devices from the AWS console for delivery 
+- install snowball client / AWS OpsHub 
+- ship back the device when you are done 
+- data will be loaded to s3  bucket 
+- snowball is completely wiped 
+
+Edge Computing 
+- processing data while it is being created on an edge location 
+- can be a truck on the road, ship, mining station underground 
+- these location can be limited in terms of internet access, no easy acces to computing power 
+- 
+
 
