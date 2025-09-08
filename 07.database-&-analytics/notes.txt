@@ -1,0 +1,97 @@
+01. Database Intro 
+- storing data on disk (EFS, EBS,EC2,S3) can have limits 
+- you can structure data 
+- you can index for efficiency 
+
+
+Types of databases 
+1. Relational Databases : Can use sql to perform lookup 
+2. NoSQL : non relational databases 
+    has schema which is the shape of the data 
+    scalable since you can use distributed clusters 
+    high performance 
+    eg eg ke-value db, graph, json 
+
+Databases & Shared Responsibility on AWS 
+- aws offers use to manage different databases 
+- benefits are :
+    quick provisioning 
+    automated backups 
+    os patching is done by aws 
+    monitoring and alerts 
+NB: many database technologies could be run on EC2, but you must handle the resiliency yourself, backup, patching, high availability, fault tolerence, sacling etc. 
+
+02. AWS RDS Overview 
+- RDS stand for realtional database service 
+- is a managed database service that uses SQL as query language 
+- allows you to create databases in the cloud that are managed by aws 
+- these dbs can be postgres, mysql, mariadb, oracle, microsoft sql server , aurora (AWS)
+
+Benefits of RDS vs deploying DB on EC2 
+-> automated provisioning, OS patching 
+-> continous backups and restore to specific timestamp (Point in Time Store)
+-> monitoring dashboard 
+-> read replicas for improved read performance 
+-> multi availability zones for disaster recovery 
+-> maintainance windows for upgrade 
+-> scaling capability (vertical & horizontal)
+-> storage backed by EBS (Elastic Block Storage) like gp2 or io 1.
+NB: You cannot ssh into the RDS db instances 
+
+
+RDS Solution Architecture 
+
+Elastic Load Balancer ---> EC2 Instances ---> Amazon RDS (Read Write)
+
+
+03. Amazon Aurora 
+- is proprietary technology owned by AWS 
+- is is not open sourced 
+- it only supports postgresql and mysql 
+- it is cloud optimized over mysql and postgres 
+- it automatically grows in increments of 10GB 
+- it costs more than RDS 
+- no free tier 
+- more efficient 
+
+04. RDS Deployments : Read Replicas, Multi-Availability Zones 
+- when working/deploying RDS, you need to know the architectures you can make 
+- These are 
+    1. Read Replicas : to read more data from RDS, create a replica of your RDS which allows your application to read from the replicas. Can be upto 5 
+    Data is only written in the main RDS database 
+
+    2. Multi - AZ : failover in case of AZ outage (high availability)
+    in case the main RDS crashes, RDS will trigger failover and then use the failover 
+    You can only have 1 failover AZ 
+
+    3. RDS Deployments : Multi - Region 
+    multi region for read replica from different regions 
+    in anytime application need to write data, it writes to all the regions 
+    good for disaster recovery stragegy for backups 
+    local performance for global reads 
+    replication cost is high 
+
+
+05. Amazon ElasticCache Overview 
+- used for managed redis or memcached 
+- caches are in memory database with high performance, low latency 
+- helps reduce load off database for read intensive workloads 
+- aws takes care of OS maintainance, patching, optimization, setup, configuration, monitoring, failure recovery and backups 
+
+
+06. DynamoDB 
+- is a fully managed highly available with replication across 3 AZ 
+- part of the nosql db 
+- scales to massive workloads and distributed serverless database 
+- scales to millions of requests per second, trillion of rows 
+- fast and consitent in performance 
+- integrated with IAM for securit, authorization 
+- it is a key value database 
+
+07. DynamoDB Accelerator - DAX 
+- fully managed in-memory cache for DynamoDB 
+- 10x performance improvement 
+- secure, highly scalable, and available 
+
+
+08. Redshift
