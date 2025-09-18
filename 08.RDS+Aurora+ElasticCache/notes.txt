@@ -1,0 +1,48 @@
+Amazon RDS Overview 
+- RDS stand for Relational Database Service 
+- It is managed db service for DB use of SQL as a query language 
+- Allows you to create databases managed by AWS 
+- Types of db are mysql, postgres, mariadb, orcacle, microsoft 
+
+Advantage 
+- RDS is managed service 
+- provisioning is automated 
+- continous backups are provided 
+- has monitoring dashboard
+- multi AZ 
+- maintainance winndow update 
+- scaling capability(vertical and horizontal)
+
+RDS Read Replicas
+- read replicas are used for read scalability
+- upto 15 read replicas 
+- provided within AZ, across AZ or Cross Region 
+- replication is ASYNC so reads are eventually consistent 
+- replicas can be promoted to their own db 
+- applications ust update the connection string to leverage read replicas 
+
+
+Use Case of Read Replicas 
+- you have a production database that is taking on normal load 
+- you want to run a reporting  application to run some analytics 
+- create a read replica to avoid overloading the production database 
+- read replicas only use SELECT *
+NB: 
+There is a newtork cost when data goes from one AZ to another 
+For RDS read replicas within the same region you will not pay fee 
+For read replicas withi data moving from one region to the next region, you will pay!
+
+RDS Multi AZ (Disaster Recovery)
+- SYNC replication from master to the standby database 
+- they have one DNS name for automatic app faiover to standby db 
+- increases availability 
+- fail over incase of loss of AZ, loss of network, instance or storage failure 
+
+RDS - From single AZ to Multi-AZ 
+- this is zero downtim process 
+- you do not need to stop the database 
+- you need to just click on 'Modify' for the database 
+- sync replication will start 
+
+
+
