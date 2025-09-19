@@ -129,6 +129,13 @@ c) Cache Evictions & Time-to-live (TTL)
     TTL can range from few seconds to hours or days 
     If you have too many evictions, you should scale up or out 
 
+7. Amazon MemoryDB for Redis 
+- it is redis compatible, durable, in-memory database service 
+- ultra fast performance with over 160 millions requests/second 
+- it is in memory data but mutli-AZ transactional durability 
+- scales seamlessly from 10s GBs to 100s TBs of storage 
+- use cases : web, mobile, online gaming, media streaming 
+- 
 
 
 

@@ -1,0 +1,12 @@
+1. What is DNS 
+- Domain Naming System which translates human friendly hostname to IP addresses 
+- it is the backbone of the internet 
+
+2. Terminologies 
+- Domain Registrar : Amazon Route53, GoDaddy etc 
+- DNS Records : A, AAAA, CNAME, NS etc 
+- Zone File : contains DNS records 
+- Name Server : resolves DNS queries (Authoritatitve vs Non-Authoritative)
+- Top Level Domain (TLD) : .com, .us, .in, .gov, .org
+- Second Level Domain (SLD) : amazon.com, google.com 
+- 
