@@ -1,4 +1,5 @@
-Amazon RDS Overview 
+1. Amazon RDS 
+Overview 
 - RDS stand for Relational Database Service 
 - It is managed db service for DB use of SQL as a query language 
 - Allows you to create databases managed by AWS 
@@ -43,6 +44,91 @@ RDS - From single AZ to Multi-AZ
 - you do not need to stop the database 
 - you need to just click on 'Modify' for the database 
 - sync replication will start 
+
+2. Amazon Aurora
+- is a proprietary technology by AWS 
+- postgres and mysql are supported as Aurora DB meaning your drivers will work as if Aurora was postgres or mysql database. 
+- it is cloud optimized with 5x and 3x performance over mysql and postgres 
+- storage automatically grows in increments of 10GB to 128TB 
+- it can have upto 15 replicas and their replication is faster than mysql and postgres (sub 10ms replica lag)
+- Failover in Aurora is instantaneours 
+- it costs more tha RDS by upto 20% more 
+
+2a Availability and read scaling 
+- store 6 copies of your data across 3AZ 
+    4 copies out of 6 are needed for writes 
+    3 copies out of 6 are needed for reads 
+    has self healing with peer to peer replication 
+    storage is striped across 100s of volumes 
+- one master aurora instance takes to write 
+- automated failover for master in less than 30s 
+- master with upto 15 aurora read replicas 
+- read replicas auto scale 
+- there are writer endpoint pointing to the master which you use and automatically switch to replicas when there is a master fail over. 
+- the replicas have read endpoint which is connected to load balancer thereby writing on the replicas in a balanced way. 
+
+2(b) Aurora Features 
+- automatic fail over 
+- backup and recovery 
+- isolation and security 
+- industry compliance 
+- push butoon scaling 
+- automated patching with zero downtime 
+- advance monitoring 
+- backtrack : restore data at any point of time without backup 
+
+3. RDS & Aurora Security 
+At-rest encryption 
+- you can encrypt your data at rest in RDS and Aurora 
+- db master and replicas encryption using AWS KMs and must be defined at launch time. 
+- if master is not encrypted, the read replicas cannot be encrypted 
+- to encrypt and un-encrypt database, go through a DB snapshot & restore as encrypted. 
+In-flight encryption 
+- TLS ready by default and uses the AWS TLS root cerficate client side 
+IAM Authentication : IAM roles can connect toyour db instances 
+Security Groups : Control Newtowkr access to your RDS/Aurora DB 
+No SSH available except on RDS custom 
+Audit logs can be enabled and sent to Cloud Watch Logs for longer retention 
+
+4. Amazon RDS Proxy 
+- is a fully managed database proxy for RDS 
+- the benefit of proxy is to pool and share the DB connections established by the database 
+- this improves efficnecy by reducing the stress on db resources (eg CPU, RAM) and minize open connections (and timeouts)
+- serverless, autoscaling, highly available 
+- reduced RDS and Auroar faile time by upto 66% 
+- no code changes required for most apps 
+- enforce IAM auth for DB and securly store in AWS secret manager 
+- RDS proxy is not publicly available and must be accessed from VPC 
+
+
+5. Amazon ElastiCache 
+- is used to get managed Redis or Memcached 
+- cache is in memory db with high performance and low latency 
+- helps reduce load off a database for read intensive workloads 
+- AWS takes care of OS maintainance, patching, optimization, setup, configuration, monitoring, failure recovery and backups 
+NB: ElastiCache involves heady application code changes 
+
+6. Caching Implementation Considerations 
+- Read more at: https://aws.amazon.com/caching/Implementation-Considerations/
+- Types of caching 
+a) Lazy loading/Cache-Aside/Lazy Population : 
+    Pros: Only requested data is cached. 
+    Cons: 3 trips 
+b) Write Through 
+    add or update cache when database is updated 
+    Pros : data in cache is nver stale, reads quick 
+           write penalty vs read penalty (each write makes 2 calls)
+    Cons : missing data till RDS is updated 
+           cache churn a lot of data will be in cache 
+c) Cache Evictions & Time-to-live (TTL)
+    eviction can happen in 3 ways 
+    - you delete the item explicitly in the cache 
+    - item is evicted because the memory is full and its not recently used 
+    - you can set an item to have time to live 
+    TTL are helpful for any kind of data eg leaderboards, comments, activity streams 
+    TTL can range from few seconds to hours or days 
+    If you have too many evictions, you should scale up or out 
+
 
 
 
