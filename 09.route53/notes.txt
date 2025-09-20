@@ -9,4 +9,79 @@
 - Name Server : resolves DNS queries (Authoritatitve vs Non-Authoritative)
 - Top Level Domain (TLD) : .com, .us, .in, .gov, .org
 - Second Level Domain (SLD) : amazon.com, google.com 
+
+2. Amazon Route 53 
+- this is highly available, scalable, fully managed and `Authoritative` DNS.
+- customer can update the dns 
+- it is also a domain registrar 
+- we have the ability to check the health or resource 
+- it is the only AWS service which provides 100% SLA 
+- why route 53? > 53 is a reference to the traditional DNS port 
+
+3. Route 53 - Records 
+- you will define how you want to route traffic for a domain 
+- each record will contain 
+    dormain/subdomain name e.g example.com, 
+    record type eg A or AAAA 
+    value eg 12.34.56.78 
+    routing policy - how Route 53 responds to queries 
+    TTL - amount of time the record cached at DNS resolvers 
+- support dns record types are :
+    must know : A/AAAA/CNAME/NS 
+    advanced : CAA/DS/MX/NAPTR/PTR/SOA/TXT/SPF/SRV 
+
+4. Route 53 - Record Types 
+- A -> maps hostname to IPv4 
+- AAAA -> maps a hostname to IPv6 
+- CNAME -> maps a hostname to another hostname 
+        -> the target is domain name which must have an A or AAAAA record 
+        -> cannot create a CNAME record for the top node of a DNS namespace (Zone Apex) eg you cannot create example.com but you can create www.example.com 
+- NS -> Name Server of the Hosted Zone . Controls how traffic is routed to a domain 
+
+5. Route 53 - Hosted Zones 
+- a container of records that define how to route traffic to a domain and its subdomains 
+- there are two types 
+    1. Public Hosted Zones 
+     - contains records that specify how to route traffic on the Internet (public domains) eg application_one .mypublicdomain.com 
+    2. Private Hosted Zones 
+     - contains record that specify how you route traffic within one or more VPCs (private domain names) eg application_one .company.internal
+- you pay $ 0.50 per month per hosted zone 
+
+6. Route 53 - Public vs Private Hosted Zones 
+- Public Hosted zones can answer queries for public clients eg S3 bucket, CloudFront, EC2, Application LoadBalancer 
+- Private hosted zones are within VPCs and allow you to access resources within a private network eg DB Instances with private ip, EC2 instances with private IP 
+
+7. Route 53 - Register Domain 
+- search for route 53 in the AWS console search bar 
+- you will register domain eg bsteve.me on AWS. It costs money! 
+
+8. Route 53 - Create Records 
+- navigate to hosted zones/search for hosted zones and click on `create hosted zone` 
+- pick record type eg A then ipv4 address 
+- nslookup bsteve.me or dig bsteve.me 
+- answer section with show you the type of record and the value eg A -> 11.22.33.44 and TTL . 
+
+9. Route 53 - Records TTL (Time To Live)
+- record ttl is time to live 
+- when an ip is returned, it will have the ttle with the client caching the record with ttl 
+- the idea is not to query dns too often 
+- ttl is mandatory for every record 
+
+10. CNAME vs Alias 
+- aws resources expose an AWS hostname. can be lb 1-1234.us-east-2.elb.amazonaws.com but you want yourapp.yourdomain.com 
+- you can have two options :
+    1. CNAME -> allows you to point hostname to any other hostname
+    eg (app.mydomain.com => blabla.anything.com). Only works for non root domain names 
+    2. Alias -> specific to route 53 and allows you to point hostname to an aws resource eg (app.mydomain.com => blabla.amazonaws.com)
+    works for root domain and non root domain 
+    free of charge and have native health check 
+
+10(a) Route 53 - Alias Records 
+- maps hostname to aws resource 
+- an extension to dns functionality 
+- automatically recognizes changes in the resource's IP addresses 
+- unlike CNAME, it can be used for the top node of a DNS namespace (zone apex) eg example.com 
+- alias record is type A or AAAA and ttl is set by route 53 
+- alias targets are elastic load balancers, cloudfront distribution , api gateway, elastic beanstalk environment, S3 websites, vpc interface endpoints, global accelerator accelerator, route 53 record in the same hosted zone 
+- NB: You cannot set an ALIAS record for an EC2 DNS name 
 - 
