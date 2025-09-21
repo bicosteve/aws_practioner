@@ -84,4 +84,57 @@
 - alias record is type A or AAAA and ttl is set by route 53 
 - alias targets are elastic load balancers, cloudfront distribution , api gateway, elastic beanstalk environment, S3 websites, vpc interface endpoints, global accelerator accelerator, route 53 record in the same hosted zone 
 - NB: You cannot set an ALIAS record for an EC2 DNS name 
+
+
+11. Routing Policy - Simple
+- routing policy defines how route 53 responds to DNS queries 
+- NB: `routing` here is not the same as the Load Balancer routing which routes traffic 
+- DNS does not route traffic but only responds to the DNS queries and then the client will know where to route its traffic 
+- Route 53 supports the following routing policies 
+    -> simple 
+    -> weighted
+    -> failover 
+    -> latency based 
+    -> geolocation 
+    -> muti-value answer 
+    -> geoproximity (using route 53 traffic flow feature)
+
+11(a) Simple 
+- typically routes traffic to a single resource 
+- you can specify multiple values in the same record 
+- if multiple values are return, a random one is chosen by the *client* 
+- when an alias is enabled, only one aws resource can be returned
+- this cannot be associated with health checks 
+- 
+
+11 (b) Weighted 
+- controls the percentage of the requests that go to each specific resource 
+- each record is assigned a relative weight :
+  traffic = weight for specific record/sum of all the weights for all records 
+- the weights do not have to sum up to 100% but just indicates the weight to send to an instance 
+- for this to work, the DNS records must have the same name and type 
+- it can be associated with health checks 
+- use cases is for load balancing between regions, testing new application verstion etc 
+- if you send a weight amount of 0, no traffic will be send to a resource 
+- if all the records have weight of 0, then all record will be returned equally 
+
+11(c) Latency Based 
+- redirects to the resource that has the least latency close to us 
+- super helpful when latency is your concern 
+- latency is based on traffic between your users and AWS regions 
+- can be associated with health checks 
+
+11(d) Health Checks 
+- HTTP health checks are for only public resources 
+- health checks can be for:
+    monitoring endpoints eg app, server, other aws resource 
+    monitor other health checks 
+    monitor cloud watch 
+- calculated health checks combine the results of multiple health checks into a single health check 
+- can monitor upto 256 endpoints 
+-   
+
+11(e) Failover 
+- you can set up two instance one for primary and another for disaster recovery 
+- the primary one instance is for mandatory health check and if not healthy R53 will `failover` to the secondary instance for disaster recovery 
 - 
