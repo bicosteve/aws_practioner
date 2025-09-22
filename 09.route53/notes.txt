@@ -138,3 +138,44 @@
 - you can set up two instance one for primary and another for disaster recovery 
 - the primary one instance is for mandatory health check and if not healthy R53 will `failover` to the secondary instance for disaster recovery 
 - 
+
+11(f) Geolocation 
+- Different from latency based 
+- this routing is based on user location 
+- specify location by continent, country, or state if there is overlapping most precise location
+- use case is website localization, restrict content distribution, load balancing etc 
+- can be associated with health check
+
+
+11(g) Geoproximity Routing Policy 
+- used for routing traffic based on ghe geographic location of users and resources. 
+- has an ability to shift more traffic to resources based on the defined bias. 
+- to change the size of the geographic region, specify bias values 
+1. to expand (1 to 99) more traffic to the resource 
+2. to shrink (-1 to -99) less traffic to the resource 
+- resource can be 
+1. AWS resource (specify AWS region)
+2. Non-AWS resrouces (specify latitude and longitude)
+- you must use route 53 traffic flow (advanced) to use this feature 
+
+11(h) IP-based Routing Policy 
+- routing is based on the client's IP addresses 
+- in route 53 define a list of CIDRs for the client and the corresponding endpoints/locations (user-IP-to_endpoint mappings)
+- use cases : optimize performance, reduce network costs, etc 
+- example : route end users from a particular ISP to a specific endpoint 
+
+
+11(i) Multi-value Routing Policy 
+- use when routing traffic to multiple resources 
+- route 53 return multiple value/resources 
+- can be associated with health checks (return only values for healthy resources).
+- upto 8 healthy records are returned for each multi-value query 
+- multi-value is not a subsitute for having an ELB 
+
+
+12. Domain Registar vs DNS Service 
+- you can buy or register your domain name with Domain Registrar typically by playing annual charges (e.g., GoDaddy,Amazon Regitrar Inc, Google Domain, etc).
+- you will pay annual charges 
+- the domain registrar usually provides you with a DNS service to manage your DNS records 
+- but you can use another DNS service to manage your DNS records 
+
