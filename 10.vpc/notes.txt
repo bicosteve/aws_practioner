@@ -1,0 +1,80 @@
+01. VPC & Subnets Primer 
+- VPC -> virtual private cloud 
+- VPC is a regional resource 
+- inside the vpc you have subnets 
+- subnets allow you to partition your network inside your vpc 
+- subnets are in AZ 
+- you can have public and private subnets 
+- public subnet is accessible through the internet and private subnet is only accessible within the vpc 
+- to define access to the internet and between subnets you will use *Route Tables* 
+- AWS gives you a default VPC with public subnet and not private subnet 
+
+02. Internet Gateway & NAT Gateways 
+- Internet Gateways helps our VPC instances to connect with the Internet 
+- Internet gateway lives in the VPC 
+- Public Subnets have a route to the internet gateway 
+- NAT Gateways (AWS-managed) & NAT Instance (self-managed) allows your instaces in the private subnet to access the internet while remaining private 
+- NAT instances is deployed in the public subnet then provide a route for the instances on the private subnet to access NAT which has access to the Internet Gateway then to the Internet 
+
+
+03. Network ACL & Security Groups 
+* Network Access Control List (NACL) *  
+- A Network ACL is a set of rules that control inbound and outbound traffic at the subnet level in a network. 
+- It acts like a firewall for subnets, deciding whether to allow or deny packets based on IP addresses.
+- controls traffic to and from the subnet 
+- has ALLOW or DENY rules 
+- are attached at the subnet level 
+- rules ONLY include IP addresses 
+- any traffic first reach NACL before getting to the instances on the subnet 
+
+* Security Groups * 
+- a firewall that controls traffic to and from Elastic Network Interface (ENI) or EC2 instance 
+- it can ONLY have ALLOW rules 
+- they can reference IP addresses or other security group 
+
+
+04. VPC Flow Logs 
+- campture information about IP traffic going into your interfaces 
+- the traffic can be vpc flow logs, subnet flow logs, elastic network interface flow logs etc 
+- it is used to monitor and trouble shoot connectivity issues eg subnet to internet, internet to subnets 
+- captures network informaition from anything managed by AWS 
+
+
+05. VPC Peering 
+- connect two vpc privately using AWS network 
+- makes vpc behave as if they wer on the same network 
+- to be able to make VPC peering, make sure the CIDR (IP address ranges) are not overlapping. 
+- VPC peering must be established for each vpc that needs to communicate with one another. here if you have VPC A, B, C. If you connect A -> B and A -> C, B and C cannot talk to each other. B and C can only communicate through their own peering 
+
+
+06. VPC Endpoints 
+- endpoints allow you to connect to AWS services using a private network instead of the public www network. 
+- by default, all aws services are public ! 
+- vpc endpoints gives you enhanced security and lower latency to access AWS services 
+- it is only used within your vpc 
+
+07. Site to Site VPN & Direct Connect 
+* Site to Site VPN * 
+- connects an on-premises VPN to AWS 
+- the connection is automatically encrypted 
+- it goes over the Internet 
+
+* Direct Connect (DX) * 
+- establishes a physical connection between on-premises and AWS 
+- the connection is private, secure and fast 
+- goes over a private network 
+- takes atlease a month to establish 
+
+
+08. LAMP Stack on EC2 
+- linux : OS for ec2 instances 
+- apache : web server that run on linux (ec2)
+- mysql : database on RDS 
+- PHP : application logic (running on EC2)
+- can add redis/memcached (elasticach) to include caching 
+- store local application data & software to Elastic Block Storage drive in the root 
+
+NB: Research on 
+1. 3 tier architecture 
+2. wordpress on AWS 
+
