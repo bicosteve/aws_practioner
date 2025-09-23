@@ -1,0 +1,93 @@
+01. EC2 instance metadata (IMDS)
+- allows ec2 instances to 'learn about themselves' without using IAM Role for that purpose 
+- they can talk to a specific url `http://169.254.169.254/latest/meta-data` and then they are able to learn their own metadata 
+- you can retrieve the IAM role name from the metadata but you CANNOT retrieve the IAM Policy.
+- metadata is the instance info 
+- It has two versions 
+- IMDSv1 accesses `http://169.254.169.254/latest/meta-data` directly 
+- IMDSv2 is more secure and is done by first getting the session token then use the session token to make calls to the instance 
+- get the token with:
+TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
+- echo $TOKEN
+- generate the metadata with the token 
+curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/
+
+
+02. AWS CLI Profiles 
+- you can have more than one profile configured in your cli 
+- to do so, use `aws configure --profile 'other-profile'`
+- follow the prompt and configure the profle 
+-  `cat credentials`
+- you will see more than one profile 
+- `aws s3 ls --profile other-profile` 
+
+03. Multifactor Authentication with CLI 
+- to use MFA with the CLI, you must create a temporary session.
+- to do so, you must run the STS GetSessionToken API call.
+- `aws sts get-session-token --serial-number arn-of-the-mfa-device --token-code code-from-token --duration-seconds 3600`
+- serial number of mfa is set when you create multifactor authentication 
+- code-from-token is from the mfa device 
+- command : 
+`aws sts get-session-token --serial-number arn:aws:iam::854196226776:mfa/bix_a53 --token-code 123456 --duration-seconds 50000`
+- you will get credentials 
+- {
+    "Credentials": {
+        "AccessKeyId":"xxx", 
+        "SecretAccessKey": "xxxx", 
+        "SessionToken":"xxxx",
+        "Expiration":"xxxx",
+    }
+}
+- this token is temporary 
+- copy the credentials and you can use them in aws 
+eg `aws confgure --profile mfa:bixx` 
+AWS Access Key ID  [None]: ****
+AWS Secret Access Key [None]: **** 
+Default Region NAME 
+
+- aws s3 ls --profile mfa 
+
+04. AWS SDK Overview 
+- if you want to perform actions on AWS directly from your application code, use software development kit (SDK). 
+- we use sdk when making api calls to aws services in our code like DynamoDB 
+NB: If you do not specify or configure a default region, then use-east-1 will be chosen by default. 
+
+
+05. AWS Limits (Quotas)
+- there are two types of limits 
+(a) API Rate Limits 
+- this is how many times you can call an aws service. 
+- eg getobject on s3 has a 5500 get per second per prefix.
+- eg describeinstances api for ec2 has a limit of 100 calls per second.
+
+
+(b) Service Quotas (Service Limits)
+- running on demand standard instances is 1152vCPUs 
+- if you want more vCPU you can open a ticket 
+- you can use exponential backoff is you are getting 'ThrottlingException'.
+- retry mechanism is already included in AWS SDK API calls. 
+- you must only implement retries on 5xx on server errors 
+- 4xx client errors do not need exponential backoff 
+
+
+06. CLI Credentials Provider Chain 
+- the cli will look for credentials in this order : 
+* command line opitons --region, --output, and --profile 
+* environment variables --AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY, and AWS_SESSION_TOKEN
+* CLI credentials file --aws configure ~/.aws/credentials  (Linux)
+* CLI configuration file -aws configure ~/.aws/config (Linux) 
+* container credentials - for ECS tasks 
+* instance profile credentials - for EC2 instance profiles 
+- this is the priority of credentials 
+
+** Credentials Best Practises **
+- never store credentials in your code 
+- best practise is credentials to be inherited from credentials chain 
+- if working withing aws use IAM Roles for :
+    => EC2 instance roles for EC2 instances 
+    => ECS roles for ECS tasks 
+    => lambda roles for lambda functions 
+- if you are working outside aws, use environment variables or named profiles 
+- 
+
+
