@@ -1,0 +1,59 @@
+1. S3 Moving Between Storage Classes 
+- S3 has various storage classes 
+- These are : Standard, Standard IA, Intelligent Tiering, One-Zone IA, Glacier Instant Retrieval, Glacier Flexible Retrieval, and Glacier Deep Archive. 
+- You can transition objects between storage classes 
+- For infrequently accessed object, move them to Standard IA 
+- For archive objects that you do not need to fast access, move them to Glacier or Deep Glacier Archive 
+- Moving objects between this classes can be automated using lifecycle rules 
+- Lifecycle Rules can be :
+    * Transition Actions - configure objects to transition to another storage class eg 
+    - 'Move objects to Standard IA class 60 days after creation'
+    - 'Move to Glacier for archiving after 6 months'
+    * Expiration Actions - configure objects to expire (to be deleted) after some time eg 
+    - 'Access log files can be set to be deleted after a 365 days' 
+    - 'Can be used to delete old versions of files (if versioning is enabled)' 
+    - 'Can be used to delete incomplete Multi-Part uploads'
+    * Rules can be created for a certain prefix (example: s3://mybucket/mp3/*)
+    * Rules can be created for a certain object tags (example: Department:finance).
+- To help decide how to transition objects to the right storage class, use Storage Class Analysis. 
+- Recommended for standard and standard IA and does not work for one-zone IA or Glacier. 
+
+2. S3 Event Notifications 
+- events are things which will happen in your S3. 
+- they can be S3:ObjectCreated, S3:ObjectRemoved,S3:ObjectRestore,S3:Replication etc 
+- object name filtering is possible eg (*.jpg)
+- use case : generate thumbnails of images uploaded to S3 then you can send the notification to SNS, SQS, or lambda function 
+- you can create as many event as desired and send them to targets you want 
+- for event notification to work you need IAM permissions 
+- for SNS, you need to create SNS Resource (Access) Policy 
+- for SQS, you need to create SQS Resource (Access) Policy 
+- for Lambda Function, you need lambda resource policy 
+- you can use amazon eventbridge for your notifications 
+- eventbridge enhances the capability of S3 since it can send rules to over 18 aws services as destinations 
+- you can get advanced filtering options with json rules 
+- it can have multiple destinations eg step functions, kinesis stream etc 
+- has multiple eventbridge capabilities eg archive, replay, and reliable delivery
+
+
+3. S3 Baseline Performance 
+- S3 automatically scales to high requests reates with latency of 100-200ms 
+- your application can get 3500 CRUD or 5500 GET/HEAD requests per second per prefix in a bucket 
+- there is no limits to the number of your prefixes in a bucket 
+- example (object path => prefix) - bucket/folder1/sub1/file => /folder1/sub1/ 
+- for performance multi-part uploads is recommended for files > 100mb and must be used for files greater than 5GB. 
+- it helps in parallelizing uploads which speeds up transfer 
+- S3 Byte-Range Fetches is used to parallelize GETs by requesting specific byte ranges. 
+- it has better resilience in case of failures 
+- it used to speed up downloads 
+
+
+4. S3 User Defined Object Metadata & Object Tags
+- when uploading an object, you can also assign a metadata 
+- this is key-value pair attached to your object 
+- the name must start with 'x-amz-meta-' 
+- metadata is stored in lowercase 
+- metadata can be retrieved while retrieving object 
+- tags in the other hand are key-value pairs  which are useful in fine-grained permissions eg only access objects with specific tags 
+- it is useful for analytics purposes 
+- you cannot search or filter by metadata or tags 
+
