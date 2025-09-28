@@ -1,0 +1,20 @@
+1. CloudFront Overview
+- it is content delivery network (CDN)
+- it improves the read performance by caching content at the edge of various locations.
+- it improves the user experience 
+- has 100s of point of presence globally 
+- provides DDoS protections 
+- the origins can be :
+    s3 bucket 
+    VPC origin 
+    custom origin (http)
+
+2. CloudFront vs S3 Cross Region Replication 
+- cloudfront has global edge network location 
+- cloudfront has files cached for a TTL (maybe a day)
+- cloudfront is great for static content that must be available everywhere 
+- S3 cross region replication must be set up for each region you want replication to happen 
+- files are updated in real-time 
+- it is read only 
+- great for dynamic content that needs to be available for low latency in few regions 
+- 
