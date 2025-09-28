@@ -63,3 +63,25 @@
 - target logging bucket must also be in the same AWS region 
 - never set set your logging bucket to be the bucket you are logging at is you do, you will have a logging loop and it is very expensive. 
 - 
+
+5. S3 Pre-signed URLs
+- these are urls you can generate using the S3 console, AWS CLI or SDK 
+- the url has expiration eg 12hrs or 168hrs 
+- users are given permisssions of the user who generated the url to perform GET/PUT operations and can access to a file 
+- common use case for temporary access 
+- examples :
+    * allow only logged in users to download a premium video from your s3 bucket
+    * allow an ever changing list of user to download files by generating URLs dynamically 
+    * allow user to temporarily upload a file to a precise location in your S3 bucket 
+
+6. S3 Access Points 
+- you can define policies which grants access to individual user groups for various objects in s3 bucket eg finance, sales, etc 
+- this results in simple ways to manage access and scale the access 
+- simplifies security management to s3 
+- each access point has dns and manages security at scale 
+-  we can define access points to be privately accessible only within the VPC 
+
+7. S3 Object Lambda
+- use lambda functions to change the object before it is retrieved by the caller application 
+- only one s3 bucket is needed on top of which we create S3 access point and S3 object lambda access points 
+- 
