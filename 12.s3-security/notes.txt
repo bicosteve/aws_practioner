@@ -1,0 +1,65 @@
+1. S3 Object Encryption 
+- you can encrypt objects in S3 buckets using one of the 4 methods 
+- Server-Side Encryption (SSE)
+ * SSE with amazon s3-managed keys. 
+    Enabled by default. 
+    It is managed and owned by AWS. 
+    Security type is AES-256. Must set header to 'x-amz-server-side-encryption':'AES256'. 
+    Enabled by default for new objects and new buckets.
+
+ * SSE with KMS keys stored in AWS KMS (SSE-KMS). 
+    Leverage AWS keys management service to manage encryption keys. 
+    User have control and can audit key using cloudtrail 
+    Object is encrypted server side 
+    Must set header 'x-amz-server-side-encryption':'aws:kms'
+    Has limitation since you must make call to kms service when you upload and download your objects. These calls count towards the KMS quota per second.
+
+
+ * SSE with Customer-Provided Keys (SSE-C). 
+    Keys are managed by the customer outside of AWS 
+    Amazon does not store the encryption key you provide 
+    HTTPS must be used and encryption key must be provided in HTTP headers for every HTTP request made. 
+
+
+
+- Client-Side Encryption 
+    Use client libraries such S# client-side encryption library 
+    Client must encrypt data themselves before sending to Amazon S3 
+    Client must decrypt data themselves when retrieving it from S3 
+    Client fully manages the key and encryption cycle 
+
+- Encryption in transit (SSL/TLS)
+    Encryption in flight also called SSL/TLS 
+    S3 exposes two endpoints:
+     - HTTP endpoint non encrypted 
+     - HTTPS endpoint for encryption in flight 
+    HTTPS is recommended 
+    HTTPS is mandatory for SSE-C 
+    You can enfornce encryption in transit if aws:SecureTransport:false 
+
+2. S3 CORS 
+- cors -> cross-origin resource sharing 
+- Orign -> scheme (protocol) + host(domain) + port 
+- it is web browser based mechanism to allow request to toher origins while visiting main origin 
+- if a client makes a cross-origin requet on s3 bucket, we need to enable the correct CORS headers 
+- you can allow for specific origin or for * (all origins)
+
+
+3. MFA Delete 
+- force users to generate a code on a device (eg mobile phone or hardware) before doing important operations on S3 
+- Required when :
+    permanently delete an object version 
+    suspend versioning on the bucket 
+- Not required when to: 
+    enable versioning 
+    list deleted versions 
+- To use MFA delete, versioning must be enabled on the bucket 
+- Only the bucket owner (root account) can enable/disable MFA delete 
+
+4. S3 Access Logs 
+- for audit purposes, you may want to log all access to s3 buckets 
+- any request made to S3 from any account, authorized or denied,  is going to be logged into another S3 bucket 
+- you can then use data analytics tool like amazon athena to analyze the data 
+- target logging bucket must also be in the same AWS region 
+- never set set your logging bucket to be the bucket you are logging at is you do, you will have a logging loop and it is very expensive. 
+- 

@@ -1,0 +1,13 @@
+Create a Custom VPC 
+1. select region 
+2. create vpc 
+3. select CIDR block 10.0.0.0/16
+4. create the subnets in AZ 
+5. each subnet will have its own cidr block 
+    - 10.0.48.0/20 -> private  
+    - 10.0.64.0/20 -> private
+    - 10.0.80.0/20 -> private 
+    - 10.0.0.0/20 -> public
+    - 10.0.16.0/20 -> public 
+    - 10.0.32.0/20 -> public 
+NB : Use IPv4 subnet creator from network00.com
