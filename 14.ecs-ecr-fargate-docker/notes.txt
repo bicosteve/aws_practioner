@@ -3,4 +3,11 @@
 - apps are packaged into containers and can be run in any OS 
 - not compatibility issues since the container is predictable 
 - use cases are microservices architecture, lif-shift apps from on prem to cloud
-- 
+
+* Docker Container Management in AWS 
+- Amazon Elastic Container Service (Amazon ECS) : AWS own container platform 
+- Amazon Elastic Kubernetes Service(Amozon EKS) : AWS managed Kubernetes 
+- Amazon Fargate : AWS serverless container platform which works with ECS and EKS. 
+- Amazon ECR : stores container images. 
+
+2. Amazon Elastic Container Service (Amazon ECS)
