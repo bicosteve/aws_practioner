@@ -17,4 +17,100 @@
 - files are updated in real-time 
 - it is read only 
 - great for dynamic content that needs to be available for low latency in few regions 
-- 
+
+
+3. CloudFront Caching & Caching Policies
+- the cache lives at each CloudFront Edge Location 
+- each object in the cache is identified by Cache Key 
+- request comes in cloudfront and cloudfront checks the edge location if the object is available or not 
+- it also checks if the cache has expired or not 
+- if object requested for is not in the cache, it is forwarded to the origin 
+- the response from the origin is then cached in the edge location 
+- the request then returns the cached result 
+- you want to maximize the cache hit ratio to minimize requests to the origin 
+- you can remove part of the cache with CacheInvalidation instead of using TTL 
+- CloudFront Cache Key is a unique identifier for every object in the cache 
+- by default, it consists of hostname + resource portion of the URL 
+- you can add other elements (HTTP headers, cookies,query strings) to the cache key using CloudFront Cache Policies if your application serves varied resources 
+- you can has cache policy based on :
+ * HTTP Headers: None - Whitelist 
+ * Cookies: None - whitelist include all-except-all 
+ * Query Strings: None - whitelist - include all-except-all 
+- control the TTL (0 seconds to 1 year), can be set by the origin using the Cache-Control header, Expires header etc 
+- you can create your own policy or predefined aws policy 
+- you can specify the values that you want to include in the origin request without including them in the cache key (no dublicated cache content)
+- you can include http headers (None,Whitelist,All viewers headers options), cookies (None-Whitelist-All), query strings(None,Whitelist,All).
+- ability to add CloudFront HTTP headers and custom headers to an origin request that were not included in the viewer request 
+
+
+4. CloudFront Cache Invalidations 
+- incase you update the back-end origin, cloudfront does not know about it and will only get the refreshed content after the TTL has expired 
+- you can force an entire or partial cached refresh therefore bypassing the TTL by performing a `CloudFront Invalidation` 
+- you can invalidate all files (*) or a special path (/images/*)
+
+
+5. CloudFront Cache Behaviours 
+- you can configure different settings for a given URL path pattern 
+- example: one specific cache behaviour to images/*.jpg files on your origin web server 
+- you may want to route to different kind of origins/origin groups based on the content type or path pattern eg /images/* 
+- when adding addtional cache behaviors, the default cache behaviour is always the last to be processed and is always /* 
+- you can maximize cache hits by separating static and dynamic distributions 
+- static content can be kept in S3 bucket with no headers, sessions caching rules and will be for static requests 
+- dynamic content like REST, HTTP server request, cache can be baed on correct headers and cookies 
+
+
+6. CloudFront - Application Load Balancer/EC2 as an Origin 
+- you can connect cloudfront to VPC origins to deliver content to your EC2 instances and applications
+- allows you to deliver content from your applications hosted in your VPC private subnets (no need to expose them to the internet). 
+- you can deliver traffic to private application load balancers, network load balancers, and EC2 instances. 
+- this works by having a CloudFront with Edge Location then connect the cloudfront with VPC Origin which resided in your VPC . You can then connect your VPC to the backends eg ALB, NLB, or EC2 instances. 
+- cloudfront will then create a link between it through VPC Origin to your subnet services. 
+- it is the most secure way since you choose what to expose. 
+
+
+7. CloudFront - Geo Restrictions 
+- you can restrict who can access your distribution based on their origin 
+- you can have AllowList which allow your users to access your content only if they are ion one of the countries on a list of approved countries 
+- you can have BlockList which prevents your users from accessing your content if they are in one of the countries on a list of banned countries. 
+- you can use 3rd party Geo-IP database to restrict the geographical origins 
+
+
+8. CloudFront Signed URL/Signed Cookies 
+- say you want to distribute paid shared content to premium users over the world.
+- you can use cloudfront signed url/cookie and attach policy which includes url expiration, ip ranges, and trusted signers 
+- you can also set the url to be valid for a period eg few minutes or years 
+- signed url gives access to individual files (one signed url per file)
+- signed cooki give multiple access to multiple files 
+- cloudfront signed url is to allow access to a path no matter the origin. it is an account wide key pair and only the root can manage it. it can filter by ip, path, date, expiration, and can leverage caching features.
+- pre-signed url issues a request as the person who pre-signed the URL. uses the IAM key of the signing IAM principal. it has limited lifetime.
+
+
+9. CloudFront Advanced Concepts 
+* Pricing * 
+- cloudfront edge locations are all around the world.
+- cost of data out per edge location will vary.
+
+* Price Classes * 
+- you can reduce the number of edge locations for cost reduction 
+- three price classes 
+- Price Class All : all regions with best performance 
+- Price Class 200 : most regions but excludes the most expensive regions 
+- Price Class 100 : only the least expensive regions 
+
+* Multiple Origin * 
+- you may want to route to different kind of origins based on the content type 
+- for example, you can have path based on pattern like /images/*, /api/*, or /* 
+- you can set for example /api/* should have origins from Application Load Balancer 
+- any other thing /* should be from S3 Bucket 
+- you can use origin groups to increase high-availability and do failover 
+- you can have one primary origin and one secondary origin 
+- if primary origin fails, the second origin is used 
+
+* Field Level Encryption * 
+- this is to protect user sensitive information through application stack 
+- it adds an addtional level of security alongside using HTTPS and sensive info is encrypted at the end close to the user 
+
+10. CloudFront - Real Time Logs 
+- you can get real time requests received by CloudFront sent to Kinesis Data Streams 
+- you can the monitor, analyze, and take actions based on the content delivery performance 
+
