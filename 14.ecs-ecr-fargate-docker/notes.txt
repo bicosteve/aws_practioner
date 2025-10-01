@@ -11,3 +11,75 @@
 - Amazon ECR : stores container images. 
 
 2. Amazon Elastic Container Service (Amazon ECS)
+- ECS means Elastic Container Service 
+- when you launch docker containers on aws, you are launching ECS tasks on ECS clusters.
+
+- Launch Types 
+    (a) you must provision and maintain the infrastructure (the EC2 instances). 
+    - this means your ECS cluster will be composed of EC2 instances. 
+    - each instance must run ECS agent in ECS cluster 
+
+    (b) you can launch docker containers on AWS but you may choose not to provision the infrastructure (no EC2 instances to manage).
+    - it is all `serverless` 
+    - this is done using Fargate Launch Type 
+    - you just create task definitions and AWS will run ECS tasks for you based on the CPU/RAM you need. 
+    - we will just run docker containers without knowing where it runs and without knowing the instances running it. 
+    - to scale, just increase the number of tasks. 
+    - no more EC2 instances 
+    - fargate is far more easy to manage than using the EC2 instances. 
+
+(c) ECS - IAM Roles for ECS 
+(i) EC2 instance profile (EC2 launch type only)
+- used by the ECS agent 
+- makes api call to ECS service 
+- send container logs to cloudwatch logs 
+- pull docker image from ECR 
+- reference sensitive data in secrets manager or ssm parameter store 
+(ii) ECS Task Role 
+- allows each task to have a specific role 
+- use different roles for the different ECS services you run 
+- task role is defined in the task definition 
+
+(d) ECS - Load Balancer Integrations 
+- application load balancer is supported and works for most use cases 
+- network load balancer is recommended only for high throughput/high performance use cases or to pair it with AWS Private link 
+- class load balancer supported but not recommended (since it has not advanced features - no Fargate)
+
+(e) ECS - Data Volumes (EFS)
+- you can mount EFS file system onto ECS tasks 
+- works for both EC2 and Fargate launch types 
+- taks running in any AZ will share the same data in teh EFS file system 
+- use cases are persistent multi-AZ shared storage for your containers 
+- NB: S3 cannot be mounted as file system in your ECS tasks (docker containers)
+
+3. ECS Service Auto Scaling 
+- we can manually or automatically increase/decrease the desired number of ECS tasks 
+- ECS auto scaling uses Application Auto Scaling 
+- you can three metrics with this service 
+    * averate CPU utilization 
+    * memory utilization - scale on RAM 
+    * ALB request count per target - metric coming from the ALB 
+- you can have target tracking based on target value for a specific CloudWatch metric.
+- you can have step scaling based on a speicified CloudWatch alarm 
+- you can have scheduled scaling based on a specified date/time (predictable changes)
+- NB: ECS service auto scaling (task level) is not the same as EC2 auto scaling (EC2 instance level). 
+ ** EC2 Launch Type - Auto Scaling EC2 instances 
+ - accommodates ECS service scaling by adding underlying EC2 instances 
+ - auto scaling group scaling scales your auto scaling group based on CPU utilization 
+ - you can use ECS cluster capacity provider which automatically provision and scale the infrastructure for your ECS tasks . It is paired with ASG. It is the smarter ways of doing things 
+ 
+
+ 4. ECS Rolling Updates 
+ - when updating from v1 to v2, we can control how many tasks can be started and stopped, and in which order. 
+ - you can set the min to be 50% and max to be 100%
+ - starting number of task will be 4 but can be rolled to 2 (50%) and back to 4 (100%). 
+ - you can have min of 100% then max of 150% so using 4 you will start with 4 then 6 tasks. 
+ 
+ 5. ECS Solution Architecture 
+ - you can have tasks invoked by event bridge. 
+ - example, users can upload object on S3 bucket, this event will trigger EventBridge which then runs an ECS task 
+ - you can have events invoked by Event Bridge Schedule 
+ - eg you can set eventbridge to run ecs tasks after every 1 hour 
+ - you can have events invoked by SQS queue 
+ - you can intercept stopped tasks using EventBridge 
+ - 
